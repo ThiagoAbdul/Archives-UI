@@ -1,0 +1,12 @@
+.inputContainer{
+
+}
+
+input{
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    border: 1px solid #888888;
+    padding: 1rem;
+    width: 100%;
+}

@@ -1,0 +1,12 @@
+button{
+    outline: none;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+    padding: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
