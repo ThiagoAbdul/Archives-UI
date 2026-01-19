@@ -10,7 +10,7 @@ type GetObjectProps = {
 }
 
 type PutObjectProps = {
-    file: File
+    file: Blob
 } & GetObjectProps
 
 export function useS3() {
@@ -43,8 +43,7 @@ export function useS3() {
             Body: uint8,
             ContentType: props.file.type
         }))
-
-        console.log(response)
+        
         return response
     }
 

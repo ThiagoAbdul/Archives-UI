@@ -6,11 +6,24 @@ type ArchiveProps = {
     onClick: () => void
 } & ArchiveResponse
 import styles from './archive.module.css'
+import { FaFileZipper } from 'react-icons/fa6'
 
 export function Archive({ Name, onClick, Type } : ArchiveProps){
+        function archiveIcon(){
+            switch(Type){
+                case 0:
+                    return <FaFolder/>
+                case 1: return <FaImage/>
+
+                case 3:
+                    return <FaFileZipper/>
+            }
+        }
+
+        const icon = archiveIcon()
     return <div className={styles.folder} onClick={_ => onClick()} >
         <p>{ Name }</p>
         <hr />
-        { Type == 0? <FaFolder/> : <FaImage/> }
+        {  icon }
     </div>
 }

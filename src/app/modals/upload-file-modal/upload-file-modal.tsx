@@ -3,7 +3,6 @@ import { Modal } from "../../components/modal/modal";
 import { useFilesFacade } from "../../hooks/useFilesFacade";
 import { useLoader } from "../../contexts/LoaderContext";
 import styles from './upload-file-modal.module.css'
-import { useArchive } from "../../hooks/useArchive";
 
 type UploadFileModalProps = {
     file: File,
@@ -14,7 +13,6 @@ type UploadFileModalProps = {
 export function UploadFileModal({ file, onFileUploaded, onCancel }: UploadFileModalProps){
     const { uploadFile } = useFilesFacade()
     const { setLoading } = useLoader()
-    const {  } = useArchive()
     const imageRef = useRef<HTMLImageElement | null>(null)
 
     async function onConfirmUpload(file: File){

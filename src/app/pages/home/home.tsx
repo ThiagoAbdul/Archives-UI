@@ -5,23 +5,25 @@ import { SideBar } from "../../components/sidebar/sidebar";
 import { useArchive } from '../../hooks/useArchive';
 import { useEffect, useState } from 'react';
 import { Archive } from '../../components/archive/archive';
-import { Modal } from '../../components/modal/modal';
-import { Input } from '../../components/input/input';
 import { useLoader } from '../../contexts/LoaderContext';
 import { useFilesFacade } from '../../hooks/useFilesFacade';
 import { UploadFileModal } from '../../modals/upload-file-modal/upload-file-modal';
-import { openBlobInNewTab } from '../../utils/file-utils';
+import { downloadBlob, openBlobInNewTab } from '../../utils/file-utils';
+import { CreateFolderModal } from '../../modals/create-folder-modal/create-folder-modal';
+import { BatchUploadModal } from '../../modals/batch-upload-modal/batch-upload-modal';
 
 
 
 export function Home(){
   
-  const { listArchives, archives, createFolder } = useArchive()
+  const { listArchives, archives } = useArchive()
   const { getFile } = useFilesFacade()
 
   const [showCreateFolderModal, setCreateFolderModalVisibility ] = useState(false)
   const [showUploadFileModal, setUploadFileModalVisibility ] = useState(false)
-  const [folderName, setFolderName] = useState("")
+  const [showBatchUploadModal, setBatchUploadModalVisibility ] = useState(false)
+  const [zip, setZip] = useState<Blob | null>(null)
+
   const [fileToUpload, setFileToUpload] = useState<File | null>(null)
 
   const { setLoading } = useLoader()
@@ -35,43 +37,29 @@ export function Home(){
     
   }, [])
 
-
     return (
       <>
       {  
-        showCreateFolderModal && <Modal 
-          title='Criar nova pasta' 
-          primaryButtonText='Criar' 
-          primaryAction={async () => {
-            setLoading(true)
-            try{
-              await createFolder(folderName)
-              setFolderName("")
-              await listArchives()
-  
-              setCreateFolderModalVisibility(false)
-            }
-            catch(error){
-              console.log(error)
-            }
-            finally{
-              setLoading(false)
-            }
-          }}
-          secondaryButtonText='Cancelar'
-          secondaryAction={() => {
-            setCreateFolderModalVisibility(false)
-            setFolderName("")
-          }
-            } >
-            <Input label='Nome da pasta' value={folderName} onChange={e => setFolderName(e.target.value)} />
-        </Modal>
+        showCreateFolderModal && <CreateFolderModal 
+            onCancel={() => setCreateFolderModalVisibility(false)} 
+            onCreateFolder={() => { listArchives(); setCreateFolderModalVisibility(false) }}
+            />
       }
 
       { showUploadFileModal && <UploadFileModal 
                                 file={fileToUpload!}
                                 onFileUploaded={fileId => setUploadFileModalVisibility(false) } 
-                                onCancel={() => setUploadFileModalVisibility(false)} /> }
+                                onCancel={() => setUploadFileModalVisibility(false)} /> 
+      }
+
+      {
+        showBatchUploadModal 
+        && <BatchUploadModal 
+          onCancel={() => setBatchUploadModalVisibility(false)}  
+          onUpload={() => { listArchives(); setBatchUploadModalVisibility(false) } }
+          zip={zip!}
+          />
+      }        
 
       <div className='background'>
         <Toolbar />
@@ -82,24 +70,36 @@ export function Home(){
               setFileToUpload(file);
               setUploadFileModalVisibility(true)
             } }
+            onClickArchiveFiles={zip => {
+              setZip(zip)
+              setBatchUploadModalVisibility(true)
+            }}
           />
           <div className="main">
             { archives?.map(archive => <Archive 
               key={archive.ArchiveId} 
               onClick={async () => {
-                if(archive.Type == 1){
+                if(archive.Type > 0){
                   setLoading(true)
                   const response = await getFile(archive.ArchiveId)
                   
-                  console.log(response)
-
                   var blob = await new Response(response.Body as ReadableStream, {
                     headers: {
                       "Content-Type": response.ContentType!
                     }
                   }).blob()
-                  openBlobInNewTab(blob)
+
+                  if(archive.Type == 1){
+                    openBlobInNewTab(blob)
+                  }
+                  if(archive.Type == 3){
+                    downloadBlob(blob, archive.Name)
+                  }
+
                   setLoading(false)
+                }
+                else if(archive.Type == 0){
+
                 }
               }}
               {...archive}   /> ) }

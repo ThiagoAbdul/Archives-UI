@@ -23,24 +23,39 @@ export function useFilesFacade(){
     }
 
     async function uploadFile(file: File) {
+
+        return uploadBlob(file.name, file, getFileTypeEnum(file))
+    }
+
+        async function uploadBlob(name: string, blob: Blob, type: number) {
         const fileId = v4()
         const credentials = await getAwsCredentialsProvider(idToken!)()
         await putObject({ 
             idToken: idToken!,
             bucket: import.meta.env.VITE_BUCKET_NAME,
             key: `users/${credentials.identityId}/${fileId}`,
-            file
+            file: blob
          })
 
          await createFile({
             ArchiveId: fileId,
-            ArchiveType: 1,
-            Name: file.name,
+            ArchiveType: type,
+            Name: name,
 
          })
 
         return fileId
     }
 
-    return { getFile, uploadFile }
+    return { getFile, uploadFile, uploadBlob }
 }
+
+
+function getFileTypeEnum(file: File){
+  const mime = file.type
+
+  if(mime.includes("image"))
+    return 1
+  return 1
+}
+
