@@ -26,8 +26,8 @@ export function useArchive() {
 
 
     async function listArchives(parent?: string): Promise<Archive[]> {
-        const cache = archivesCache.get(parent ?? "")
-        if(cache) return cache
+        // const cache = archivesCache.get(parent ?? "")
+        // if(cache) return cache
         const url = parent? `?parent=${parent}` : "/"
         const response = await directoryApi.get<Archive[]>(url)
 
@@ -61,7 +61,7 @@ export function useArchive() {
 
     }
 
-    return { listArchives, archives, createFolder, createFile }
+    return { listArchives, archives, createFolder, createFile, setArchives }
 
 }
 

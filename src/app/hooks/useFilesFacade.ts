@@ -3,6 +3,8 @@ import { getAwsCredentialsProvider } from "../utils/aws-utils";
 import { useAuth } from "./useAuth";
 import { useS3 } from "./useS3";
 import { useArchive } from "./useArchive";
+import type { Archive } from "../models/Archive";
+import { useParams } from "react-router-dom";
 
 export function useFilesFacade(){
 
@@ -10,7 +12,9 @@ export function useFilesFacade(){
 
     const { createFile } = useArchive()
 
-    const { idToken } = useAuth()
+    const { idToken, sub } = useAuth()
+
+    const { folder } = useParams()
 
     
     async function getFile(fileId: string){
@@ -18,7 +22,7 @@ export function useFilesFacade(){
         return getObject({
             idToken: idToken!,
             bucket: import.meta.env.VITE_BUCKET_NAME,
-            key: `users/${credentials.identityId}/${fileId}`
+            key: `users/${credentials.identityId}/${fileId}`,
         })
     }
 
@@ -27,7 +31,7 @@ export function useFilesFacade(){
         return uploadBlob(file.name, file, getFileTypeEnum(file))
     }
 
-        async function uploadBlob(name: string, blob: Blob, type: number) {
+        async function uploadBlob(name: string, blob: Blob, type: number): Promise<Archive> {
         const fileId = v4()
         const credentials = await getAwsCredentialsProvider(idToken!)()
         await putObject({ 
@@ -41,10 +45,18 @@ export function useFilesFacade(){
             ArchiveId: fileId,
             ArchiveType: type,
             Name: name,
+            Parent: folder
 
          })
 
-        return fileId
+        return {
+            ArchiveId: fileId,
+            Favorite: false,
+            Name: name,
+            Type: type,
+            UserId: sub!,
+            Parent: folder
+        }
     }
 
     return { getFile, uploadFile, uploadBlob }

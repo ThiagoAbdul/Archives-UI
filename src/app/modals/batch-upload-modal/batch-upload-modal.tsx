@@ -4,10 +4,11 @@ import { Modal } from "../../components/modal/modal";
 import { FileTypes } from "../../consts/file-types";
 import { useLoader } from "../../contexts/LoaderContext";
 import { useFilesFacade } from "../../hooks/useFilesFacade";
+import type { Archive } from "../../models/Archive";
 
 type BatchUploadModalProps = {
     onCancel: () => void
-    onUpload: () => void,
+    onUpload: (archive: Archive) => void,
     zip: Blob
 }
 
@@ -22,8 +23,8 @@ export function BatchUploadModal({ onCancel, onUpload, zip }: BatchUploadModalPr
     primaryButtonText="Confirmar" primaryAction={async () => {
         setLoading(true)
         try{
-            await uploadBlob(zipName, zip, FileTypes.ZIP)
-            onUpload()
+            const archive = await uploadBlob(zipName, zip, FileTypes.ZIP)
+            onUpload(archive)
         }
         finally{
             setLoading(false)

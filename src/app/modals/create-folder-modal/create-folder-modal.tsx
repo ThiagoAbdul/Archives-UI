@@ -5,11 +5,17 @@ import { useLoader } from "../../contexts/LoaderContext"
 import { useArchive } from "../../hooks/useArchive"
 
 
-type CreateFolderModalProps = {
-    onCreateFolder: () => void,
-    onCancel: () => void
+type Folder = {
+    id: string,
+    name: string
 }
-export function CreateFolderModal({ onCreateFolder, onCancel }: CreateFolderModalProps) {
+
+type CreateFolderModalProps = {
+    onCreateFolder: (folder: Folder) => void,
+    onCancel: () => void,
+    parent?: string
+}
+export function CreateFolderModal({ onCreateFolder, onCancel, parent }: CreateFolderModalProps) {
     const { setLoading } = useLoader()
       const { createFolder } = useArchive()
     
@@ -21,9 +27,10 @@ export function CreateFolderModal({ onCreateFolder, onCancel }: CreateFolderModa
         primaryAction={async () => {
             setLoading(true)
             try {
-                await createFolder(folderName)
+                var folderId = await createFolder(folderName, parent)
+                onCreateFolder({ id: folderId, name: folderName })
                 setFolderName("")
-                onCreateFolder()
+
             }
             catch (error) {
                 console.log(error)

@@ -3,11 +3,12 @@ import { Modal } from "../../components/modal/modal";
 import { useFilesFacade } from "../../hooks/useFilesFacade";
 import { useLoader } from "../../contexts/LoaderContext";
 import styles from './upload-file-modal.module.css'
+import type { Archive } from "../../models/Archive";
 
 type UploadFileModalProps = {
     file: File,
-    onFileUploaded: (fileId: string) => void,
-    onCancel: () => void
+    onFileUploaded: (archive: Archive) => void,
+    onCancel: () => void,
 }
 
 export function UploadFileModal({ file, onFileUploaded, onCancel }: UploadFileModalProps){
@@ -18,9 +19,9 @@ export function UploadFileModal({ file, onFileUploaded, onCancel }: UploadFileMo
     async function onConfirmUpload(file: File){
         setLoading(true)
         try{
-            const fileId = await uploadFile(file)
+            const archive = await uploadFile(file)
 
-            onFileUploaded(fileId)
+            onFileUploaded(archive)
         }
         finally{
             setLoading(false)
