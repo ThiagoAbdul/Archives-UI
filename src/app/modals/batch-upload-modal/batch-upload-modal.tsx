@@ -23,6 +23,10 @@ export function BatchUploadModal({ onCancel, onUpload, zip }: BatchUploadModalPr
     primaryButtonText="Confirmar" primaryAction={async () => {
         setLoading(true)
         try{
+            if(!zipName){
+                alert("Nome obrigatório")
+                return
+            }
             const archive = await uploadBlob(zipName, zip, FileTypes.ZIP)
             onUpload(archive)
         }

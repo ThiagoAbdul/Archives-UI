@@ -25,6 +25,10 @@ export function CreateFolderModal({ onCreateFolder, onCancel, parent }: CreateFo
         title='Criar nova pasta'
         primaryButtonText='Criar'
         primaryAction={async () => {
+            if(!folderName){
+                alert("Nome da pasta é obrigatório")
+                return
+            }
             setLoading(true)
             try {
                 var folderId = await createFolder(folderName, parent)
