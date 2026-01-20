@@ -8,6 +8,8 @@ export function useAuth(){
 
     const signOutRedirect = () => {
       removeUser().then(() => {
+        localStorage.clear()
+        sessionStorage.clear()
         const clientId = "itci4rf2edgbb71i85r7iv5ia";
         const logoutUri = "http://localhost:5173/logout";
         const cognitoDomain = "https://us-east-14vdcrduqn.auth.us-east-1.amazoncognito.com";

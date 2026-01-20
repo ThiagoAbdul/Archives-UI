@@ -99,6 +99,7 @@ export function Home() {
             }}
           />
           <div className="main">
+
             {archives?.map(archive => <Archive
               key={archive.ArchiveId}
               onClick={async () => {

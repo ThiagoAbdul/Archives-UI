@@ -1,7 +1,7 @@
 import { useRef, type ChangeEvent } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Button } from "../button/button";
-import './sidebar.css';
+import styles from './sidebar.module.css'
 import { zipFileList } from "../../utils/file-utils";
 
 
@@ -41,7 +41,7 @@ export function SideBar({ onClickNewFolder, onClickUploadFile, onClickArchiveFil
 
     }
 
-    return <div className="sidebar">
+    return <div className={styles.sidebar}>
         <input type="file" ref={inputFileRef} hidden={true} accept="image/*" onChange={onChangeFile} />
         <input type="file" ref={inputMultipleFilesRef} hidden={true} multiple accept="image/*" onChange={onChangeFiles} />
         <Button icon="add" onClick={onClickNewFolder} > Nova pasta</Button>

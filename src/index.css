@@ -3,6 +3,7 @@
 :root{
   --bg: #ececec;
   --loader-bg: #00000022;
+  --neutral: #aaaaaa;
 }
 
 * {
@@ -10,4 +11,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body{
+  background-color: var(--bg);
 }

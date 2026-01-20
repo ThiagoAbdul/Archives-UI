@@ -22,8 +22,7 @@ export function Archive({ Name, onClick, Type } : ArchiveProps){
 
         const icon = archiveIcon()
     return <div className={styles.folder} onClick={_ => onClick()} >
-        <p>{ Name }</p>
-        <hr />
         {  icon }
+        <p>{ Name }</p>
     </div>
 }

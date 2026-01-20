@@ -11,12 +11,9 @@ function App() {
 
   const loader = useLoader()
 
-  auth.events.addUserSignedIn(() => {
-    alert("Sign in")
-  })
 
   if (auth.isLoading ) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   if (auth.error) {

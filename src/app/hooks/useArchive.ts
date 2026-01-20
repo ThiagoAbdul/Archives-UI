@@ -26,14 +26,18 @@ export function useArchive() {
 
 
     async function listArchives(parent?: string): Promise<Archive[]> {
-        // const cache = archivesCache.get(parent ?? "")
-        // if(cache) return cache
+        const cacheKey = parent ?? ""
+        const cache = archivesCache.get(cacheKey)
+        if(cache) {
+            setArchives(cache)
+            return cache
+        }
         const url = parent? `?parent=${parent}` : "/"
         const response = await directoryApi.get<Archive[]>(url)
 
         setArchives(() => response.data)
 
-        archivesCache.set(parent ?? "", response.data)
+        archivesCache.set(cacheKey, response.data)
 
         return response.data
 
