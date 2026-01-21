@@ -32,3 +32,11 @@ export function downloadBlob(blob: Blob, filename: string) {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+export function isVideo(file: File){
+  return file.type.startsWith("video")
+}
+
+export function isImage(file: File){
+  return file.type.startsWith("image")
+}

@@ -42,7 +42,7 @@ export function SideBar({ onClickNewFolder, onClickUploadFile, onClickArchiveFil
     }
 
     return <div className={styles.sidebar}>
-        <input type="file" ref={inputFileRef} hidden={true} accept="image/*" onChange={onChangeFile} />
+        <input type="file" ref={inputFileRef} hidden={true} accept="image/*,video/*" onChange={onChangeFile} />
         <input type="file" ref={inputMultipleFilesRef} hidden={true} multiple accept="image/*" onChange={onChangeFiles} />
         <Button icon="add" onClick={onClickNewFolder} > Nova pasta</Button>
         <Button icon="add" onClick={() => upload(inputFileRef)} > Upload de arquivo</Button>

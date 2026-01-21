@@ -5,6 +5,7 @@ import { useS3 } from "./useS3";
 import { useArchive } from "./useArchive";
 import type { Archive } from "../models/Archive";
 import { useParams } from "react-router-dom";
+import { FileTypes } from "../consts/file-types";
 
 export function useFilesFacade(){
 
@@ -67,7 +68,9 @@ function getFileTypeEnum(file: File){
   const mime = file.type
 
   if(mime.includes("image"))
-    return 1
+    return FileTypes.IMAGE
+  if(mime.includes("video"))
+    return FileTypes.VIDEO
   return 1
 }
 

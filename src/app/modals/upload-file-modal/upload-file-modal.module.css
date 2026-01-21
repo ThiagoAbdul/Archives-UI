@@ -1,5 +1,9 @@
-.previewImage{
-    width: 100%;
+.preview{
+
+  width: 100%;
+  max-width: 90vw;
+  height: auto;
+  max-height: 60vh;
 
 
 }

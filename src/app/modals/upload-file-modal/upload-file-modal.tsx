@@ -4,6 +4,7 @@ import { useFilesFacade } from "../../hooks/useFilesFacade";
 import { useLoader } from "../../contexts/LoaderContext";
 import styles from './upload-file-modal.module.css'
 import type { Archive } from "../../models/Archive";
+import { isVideo } from "../../utils/file-utils";
 
 type UploadFileModalProps = {
     file: File,
@@ -15,6 +16,7 @@ export function UploadFileModal({ file, onFileUploaded, onCancel }: UploadFileMo
     const { uploadFile } = useFilesFacade()
     const { setLoading } = useLoader()
     const imageRef = useRef<HTMLImageElement | null>(null)
+    const videoRef = useRef<HTMLSourceElement | null>(null)
 
     async function onConfirmUpload(file: File){
         setLoading(true)
@@ -29,10 +31,21 @@ export function UploadFileModal({ file, onFileUploaded, onCancel }: UploadFileMo
     }
 
     useEffect(() => {
-        if(imageRef.current){
+        if(isVideo(file) && videoRef.current){
+            videoRef.current.src = URL.createObjectURL(file)
+        }
+        else if(imageRef.current){
             imageRef.current.src = URL.createObjectURL(file)
         }
     }, [file])
+
+    const children = isVideo(file) ? 
+    <video controls className={styles.preview}>
+        <source ref={videoRef} />
+        Seu navegador não suporta vídeo.
+    </video> 
+    : 
+    <img className={styles.preview} ref={imageRef} />;
 
     return <Modal 
             title="Deseja realizar upload da imagem?"  
@@ -40,7 +53,7 @@ export function UploadFileModal({ file, onFileUploaded, onCancel }: UploadFileMo
             primaryAction={() => onConfirmUpload(file)}
             secondaryButtonText="Cancelar"
             secondaryAction={onCancel}>
-                <img className={styles.previewImage} ref={imageRef} />
+                { children }
                 </Modal>
 
 }

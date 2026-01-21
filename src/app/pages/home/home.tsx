@@ -103,7 +103,10 @@ export function Home() {
             {archives?.map(archive => <Archive
               key={archive.ArchiveId}
               onClick={async () => {
-                if (archive.Type > 0) {
+                if (archive.Type == FileTypes.FOLDER) {
+                  navigate(`/home/${archive.ArchiveId}`) 
+                }
+                else {
                   setLoading(true)
                   const response = await getFile(archive.ArchiveId)
 
@@ -112,18 +115,20 @@ export function Home() {
                       "Content-Type": response.ContentType!
                     }
                   }).blob()
+                  switch(archive.Type){
+                    case FileTypes.IMAGE:
+                      openBlobInNewTab(blob);
+                      break;
+                    case FileTypes.VIDEO:
+                      openBlobInNewTab(blob);
+                      break;
+                    case FileTypes.ZIP:
+                      downloadBlob(blob, archive.Name);
+                      break;
 
-                  if (archive.Type == 1) {
-                    openBlobInNewTab(blob)
-                  }
-                  if (archive.Type == 3) {
-                    downloadBlob(blob, archive.Name)
                   }
 
                   setLoading(false)
-                }
-                else if (archive.Type == 0) {
-                  navigate(`/home/${archive.ArchiveId}`)
                 }
               }}
               {...archive} />)}
