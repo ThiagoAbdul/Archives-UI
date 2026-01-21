@@ -10,9 +10,9 @@ export function useAuth(){
       removeUser().then(() => {
         localStorage.clear()
         sessionStorage.clear()
-        const clientId = "itci4rf2edgbb71i85r7iv5ia";
-        const logoutUri = "http://localhost:5173/logout";
-        const cognitoDomain = "https://us-east-14vdcrduqn.auth.us-east-1.amazoncognito.com";
+        const clientId = import.meta.env.VITE_COGNITO_CLIENT_ID;
+        const logoutUri = import.meta.env.VITE_LOGOUT_URI;
+        const cognitoDomain = import.meta.env.VITE_COGNITO_DOMAIN;
         window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
       })
   };

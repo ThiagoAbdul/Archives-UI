@@ -9,9 +9,9 @@ import { LoaderProvider } from './app/contexts/LoaderContext.tsx';
 
 
 const cognitoAuthConfig: AuthProviderProps = {
-  authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4VDCrDUqn",
-  client_id: "itci4rf2edgbb71i85r7iv5ia",
-  redirect_uri: "http://localhost:5173",
+  authority: import.meta.env.VITE_COGNITO_AUTHORITY,
+  client_id: import.meta.env.VITE_COGNITO_CLIENT_ID,
+  redirect_uri: import.meta.env.VITE_REDIRECT_URI,
   response_type: "code",
   scope: "email openid profile"
 };
